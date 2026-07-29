@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
-    
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#000000">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NamaAplikasi">
+
     <title>Asisten Toko - Premium POS Enterprise</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Library Html5Qrcode untuk Kamera Scanner Barcode -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="NamaAplikasi">
-
-
-
-
-   
+    
     <style>
         :root {
             --primary: #6366f1;
@@ -675,7 +671,6 @@
         }
     </style>
 </head>
-   
 <body>
 
     <div id="app">
@@ -881,10 +876,15 @@
                             <label>Nama Toko</label>
                             <input type="text" id="setStoreNameInput" class="form-control" onchange="autoSaveProfileSettings()">
                         </div>
+                        <div class="form-group">
+            <label>Email Akun <span style="font-size: 0.7rem; color: var(--text-muted);">(Tidak dapat diubah)</span></label>
+            <input type="email" id="setEmailInput" class="form-control" readonly style="background-color: var(--bg-main); color: var(--text-muted); cursor: not-allowed;">
+        </div>
                         <div class="form-group" style="margin-bottom:0;">
                             <label>Nomor HP / WhatsApp</label>
                             <input type="text" id="setPhoneInput" class="form-control" onchange="autoSaveProfileSettings()">
                         </div>
+                        
                     </div>
 
                     <div class="setting-box">
@@ -898,7 +898,13 @@
                                 </label>
                                 <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 3px;">Perbarui QRIS toko Anda</p>
                             </div>
+                            
                         </div>
+                         <button type="submit" class="btn" style="margin-top: 0.5rem;">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Profil
+        </button>
+    </form>
+</div>
                     </div>
 
                     <div class="setting-box">
@@ -1105,39 +1111,40 @@
             document.getElementById('loginScreen').classList.remove('hidden');
         };
 
-        // Proses Pendaftaran Akun & Toko Baru Beserta Email Verifikasi
-        window.handleRegister = function(e) {
-            e.preventDefault();
-            const storeName = document.getElementById('regStoreName').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pass = document.getElementById('regPassword').value;
+// Proses Pendaftaran Akun & Toko Baru Beserta Email Verifikasi
+window.handleRegister = function(e) {
+    e.preventDefault();
+    const storeName = document.getElementById('regStoreName').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPassword').value;
 
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    // Kirim Email Verifikasi
-                    sendEmailVerification(user).then(() => {
-                        // Simpan Data Toko & Profil ke Database
-                        set(ref(db, 'users/' + user.uid), {
-                            profile: {
-                                storeName: storeName,
-                                phone: phone,
-                                photoUrl: "https://via.placeholder.com/150",
-                                qrisUrl: "https://via.placeholder.com/200"
-                            },
-                            status_langganan: "terkunci"
-                        }).then(() => {
-                            showPopup('Verifikasi Email Dikirim', 'Link verifikasi telah dikirim ke email Anda. Silakan cek email dan verifikasi terlebih dahulu sebelum masuk.', 'success');
-                            signOut(auth);
-                            switchToLogin();
-                        });
-                    }).catch((err) => {
-                        showPopup('Gagal Kirim Email', err.message, 'error');
-                    });
-                })
-                .catch((err) => showPopup('Gagal Daftar', err.message, 'error'));
-        };
+    createUserWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            // Kirim Email Verifikasi
+            sendEmailVerification(user).then(() => {
+                // Simpan Data Toko, Profil, dan EMAIL ke Database
+                set(ref(db, 'users/' + user.uid), {
+                    profile: {
+                        storeName: storeName,
+                        email: email, // <-- Tambahkan baris ini untuk menyimpan email
+                        phone: phone,
+                        photoUrl: "https://via.placeholder.com/150",
+                        qrisUrl: "https://via.placeholder.com/200"
+                    }
+                }).then(() => {
+                    showPopup('Verifikasi Email Dikirim', 'Link verifikasi telah dikirim ke email Anda. Silakan cek email dan verifikasi terlebih dahulu sebelum masuk.', 'success');
+                    signOut(auth);
+                    switchToLogin();
+                });
+            }).catch((err) => {
+                showPopup('Gagal Kirim Email', err.message, 'error');
+            });
+        })
+        .catch((err) => showPopup('Gagal Daftar', err.message, 'error'));
+};
+
 
         // Proses Masuk (Login) Memastikan Email Sudah Diverifikasi
         window.handleLogin = function(e) {
@@ -1313,7 +1320,7 @@
         function tampilkanPaywallModal() {
             let lockModal = document.getElementById('paywallModalDynamic');
             if (!lockModal) {
-                lockModal = document.createElement('div');
+                lockModal = document.edeElement('div');
                 lockModal.id = 'paywallModalDynamic';
                 lockModal.style.cssText = `
                     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -1347,14 +1354,42 @@
         }
 
         function updateUIProfile() {
-            document.getElementById('headerStoreName').innerText = userDataProfile.storeName;
-            document.getElementById('headerAvatar').src = userDataProfile.photoUrl;
-            document.getElementById('settingsAvatarPreview').src = userDataProfile.photoUrl;
-            document.getElementById('settingsQrisPreview').src = userDataProfile.qrisUrl;
-            document.getElementById('setStoreNameInput').value = userDataProfile.storeName;
-            document.getElementById('setPhoneInput').value = userDataProfile.phone;
-            document.getElementById('qrisDisplayImage').src = userDataProfile.qrisUrl;
-        }
+    document.getElementById('headerStoreName').innerText = userDataProfile.storeName;
+    document.getElementById('headerAvatar').src = userDataProfile.photoUrl;
+    document.getElementById('settingsAvatarPreview').src = userDataProfile.photoUrl;
+    document.getElementById('settingsQrisPreview').src = userDataProfile.qrisUrl;
+    
+    // Sinkronisasi nilai ke form input
+    document.getElementById('setStoreNameInput').value = userDataProfile.storeName;
+    
+    // Otomatis isi email dari data profil database atau langsung dari session login saat ini
+    const activeEmail = userDataProfile.email || (currentUser ? currentUser.email : '');
+    document.getElementById('setEmailInput').value = activeEmail;
+    
+    document.getElementById('setPhoneInput').value = userDataProfile.phone;
+    document.getElementById('qrisDisplayImage').src = userDataProfile.qrisUrl;
+}
+
+window.saveProfileSettingsManually = function(e) {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    // Hanya ambil Nama Toko dan No HP yang bisa diubah oleh user
+    userDataProfile.storeName = document.getElementById('setStoreNameInput').value.trim();
+    userDataProfile.phone = document.getElementById('setPhoneInput').value.trim();
+    
+    // Email dipastikan tetap menggunakan email yang sedang aktif login/terdaftar
+    userDataProfile.email = currentUser.email;
+
+    // Simpan ke database Firebase
+    set(ref(db, `users/${currentUser.uid}/profile`), userDataProfile).then(() => {
+        updateUIProfile();
+        showPopup('Berhasil', 'Profil toko berhasil diperbarui dan disimpan.', 'success');
+    }).catch((err) => {
+        showPopup('Gagal', err.message, 'error');
+    });
+};
+
 
         window.switchView = function(viewId, el) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
@@ -1887,14 +1922,14 @@
                 });
             }
         };
-
-           if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then((reg) => console.log('Service Worker terdaftar!', reg))
       .catch((err) => console.log('Gagal daftar Service Worker:', err));
   });
-           }
+}
+
 
     </script>
 </body>
