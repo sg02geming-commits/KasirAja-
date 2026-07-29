@@ -259,7 +259,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 20px;
+            height: 90px;
             padding-bottom: 10px;
             background: #00000000;
             border-top: 10px;
@@ -330,7 +330,6 @@
             color: var(--text-main);
         }
 
-        /* Container Grafik Dibuat Lebih Tinggi Agar Teks Nominal Bertumpuk Terlihat Jelas */
         .chart-container {
             width: 100%;
             height: 175px;
@@ -352,7 +351,6 @@
             position: relative;
         }
 
-        /* Style Teks Nominal Rupiah Bertumpuk di Atas Batang Grafik */
         .chart-value-label {
             font-size: 0.5rem;
             color: #818cf8;
@@ -594,7 +592,7 @@
             margin: 0 auto 0.75rem;
         }
 
-        /* --- STRUK THERMAL DIGITAL PREMIUM & DETAIL --- */
+        /* --- STRUK THERMAL DIGITAL PREMIUM --- */
         .thermal-receipt {
             background: #ffffff;
             color: #1a1a1a;
@@ -654,7 +652,6 @@
         .mt-2 { margin-top: 0.5rem; }
         .mb-2 { margin-bottom: 0.5rem; }
 
-        /* Styling Scanner Box Kamera */
         #interactive {
             width: 100%;
             min-height: 220px;
@@ -876,15 +873,13 @@
                             <label>Nama Toko</label>
                             <input type="text" id="setStoreNameInput" class="form-control" onchange="autoSaveProfileSettings()">
                         </div>
-                        <div class="form-group">
-            <label>Email Akun <span style="font-size: 0.7rem; color: var(--text-muted);">(Tidak dapat diubah)</span></label>
-            <input type="email" id="setEmailInput" class="form-control" readonly style="background-color: var(--bg-main); color: var(--text-muted); cursor: not-allowed;">
-        </div>
                         <div class="form-group" style="margin-bottom:0;">
                             <label>Nomor HP / WhatsApp</label>
                             <input type="text" id="setPhoneInput" class="form-control" onchange="autoSaveProfileSettings()">
                         </div>
-                        
+                        <button class="btn mt-2" style="padding: 0.6rem; font-size: 0.85rem;" onclick="autoSaveProfileSettings()">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Toko
+                        </button>
                     </div>
 
                     <div class="setting-box">
@@ -898,13 +893,7 @@
                                 </label>
                                 <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 3px;">Perbarui QRIS toko Anda</p>
                             </div>
-                            
                         </div>
-                         <button type="submit" class="btn" style="margin-top: 0.5rem;">
-            <i class="fa-solid fa-floppy-disk"></i> Simpan Profil
-        </button>
-    </form>
-</div>
                     </div>
 
                     <div class="setting-box">
@@ -1020,7 +1009,7 @@
             </div>
         </div>
 
-        <!-- SCANNER MODAL (Kamera Aktif Pemindai Barcode) -->
+        <!-- SCANNER MODAL -->
         <div class="modal-overlay" id="scannerModal">
             <div class="modal-card" style="max-width: 380px;">
                 <h3>Scan Barcode Kamera</h3>
@@ -1100,7 +1089,6 @@
 
         let selectedChartDate = null; 
 
-        // Fungsi Transisi Antara Halaman Login & Register
         window.switchToRegister = function() {
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('registerScreen').classList.remove('hidden');
@@ -1111,42 +1099,38 @@
             document.getElementById('loginScreen').classList.remove('hidden');
         };
 
-// Proses Pendaftaran Akun & Toko Baru Beserta Email Verifikasi
-window.handleRegister = function(e) {
-    e.preventDefault();
-    const storeName = document.getElementById('regStoreName').value.trim();
-    const phone = document.getElementById('regPhone').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const pass = document.getElementById('regPassword').value;
+        window.handleRegister = function(e) {
+            e.preventDefault();
+            const storeName = document.getElementById('regStoreName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const pass = document.getElementById('regPassword').value;
 
-    createUserWithEmailAndPassword(auth, email, pass)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            // Kirim Email Verifikasi
-            sendEmailVerification(user).then(() => {
-                // Simpan Data Toko, Profil, dan EMAIL ke Database
-                set(ref(db, 'users/' + user.uid), {
-                    profile: {
-                        storeName: storeName,
-                        email: email, // <-- Tambahkan baris ini untuk menyimpan email
-                        phone: phone,
-                        photoUrl: "https://via.placeholder.com/150",
-                        qrisUrl: "https://via.placeholder.com/200"
-                    }
-                }).then(() => {
-                    showPopup('Verifikasi Email Dikirim', 'Link verifikasi telah dikirim ke email Anda. Silakan cek email dan verifikasi terlebih dahulu sebelum masuk.', 'success');
-                    signOut(auth);
-                    switchToLogin();
-                });
-            }).catch((err) => {
-                showPopup('Gagal Kirim Email', err.message, 'error');
-            });
-        })
-        .catch((err) => showPopup('Gagal Daftar', err.message, 'error'));
-};
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    sendEmailVerification(user).then(() => {
+                        set(ref(db, 'users/' + user.uid), {
+                            profile: {
+                                storeName: storeName,
+                                email: email,
+                                phone: phone,
+                                photoUrl: "https://via.placeholder.com/150",
+                                qrisUrl: "https://via.placeholder.com/200"
+                            },
+                            status_langganan: "aktif"
+                        }).then(() => {
+                            showPopup('Verifikasi Email Dikirim', 'Link verifikasi telah dikirim ke email Anda. Silakan cek email dan verifikasi terlebih dahulu sebelum masuk.', 'success');
+                            signOut(auth);
+                            switchToLogin();
+                        });
+                    }).catch((err) => {
+                        showPopup('Gagal Kirim Email', err.message, 'error');
+                    });
+                })
+                .catch((err) => showPopup('Gagal Daftar', err.message, 'error'));
+        };
 
-
-        // Proses Masuk (Login) Memastikan Email Sudah Diverifikasi
         window.handleLogin = function(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
@@ -1165,7 +1149,6 @@ window.handleRegister = function(e) {
                 .catch((err) => showPopup('Gagal Masuk', err.message, 'error'));
         };
 
-        // Fungsi Membuka/Menutup Modal Konfirmasi Logout
         window.confirmLogout = function() {
             document.getElementById('logoutConfirmModal').classList.add('active');
         };
@@ -1217,7 +1200,14 @@ window.handleRegister = function(e) {
                     }
                     renderNotificationList();
 
-                    userDataProfile = data.profile || userDataProfile;
+                    if (data.profile) {
+                        userDataProfile = {
+                            storeName: data.profile.storeName || "Toko Berkah",
+                            phone: data.profile.phone || "08123456789",
+                            photoUrl: data.profile.photoUrl || "https://via.placeholder.com/150",
+                            qrisUrl: data.profile.qrisUrl || "https://via.placeholder.com/200"
+                        };
+                    }
                     productsData = data.products ? Object.keys(data.products).map(k => ({id: k, ...data.products[k]})) : [];
                     transactionsData = data.transactions ? Object.keys(data.transactions).map(k => ({id: k, ...data.transactions[k]})) : [];
                     
@@ -1229,7 +1219,7 @@ window.handleRegister = function(e) {
                 } else {
                     set(userRef, { 
                         profile: userDataProfile,
-                        status_langganan: "terkunci"
+                        status_langganan: "aktif"
                     });
                 }
             });
@@ -1320,7 +1310,7 @@ window.handleRegister = function(e) {
         function tampilkanPaywallModal() {
             let lockModal = document.getElementById('paywallModalDynamic');
             if (!lockModal) {
-                lockModal = document.edeElement('div');
+                lockModal = document.createElement('div');
                 lockModal.id = 'paywallModalDynamic';
                 lockModal.style.cssText = `
                     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -1354,48 +1344,34 @@ window.handleRegister = function(e) {
         }
 
         function updateUIProfile() {
-    document.getElementById('headerStoreName').innerText = userDataProfile.storeName;
-    document.getElementById('headerAvatar').src = userDataProfile.photoUrl;
-    document.getElementById('settingsAvatarPreview').src = userDataProfile.photoUrl;
-    document.getElementById('settingsQrisPreview').src = userDataProfile.qrisUrl;
-    
-    // Sinkronisasi nilai ke form input
-    document.getElementById('setStoreNameInput').value = userDataProfile.storeName;
-    
-    // Otomatis isi email dari data profil database atau langsung dari session login saat ini
-    const activeEmail = userDataProfile.email || (currentUser ? currentUser.email : '');
-    document.getElementById('setEmailInput').value = activeEmail;
-    
-    document.getElementById('setPhoneInput').value = userDataProfile.phone;
-    document.getElementById('qrisDisplayImage').src = userDataProfile.qrisUrl;
-}
+            const storeNameEl = document.getElementById('headerStoreName');
+            const headerAvatarEl = document.getElementById('headerAvatar');
+            const setAvatarEl = document.getElementById('settingsAvatarPreview');
+            const setQrisEl = document.getElementById('settingsQrisPreview');
+            const nameInput = document.getElementById('setStoreNameInput');
+            const phoneInput = document.getElementById('setPhoneInput');
+            const qrisDisplay = document.getElementById('qrisDisplayImage');
 
-window.saveProfileSettingsManually = function(e) {
-    e.preventDefault();
-    if (!currentUser) return;
+            if (storeNameEl) storeNameEl.innerText = userDataProfile.storeName;
+            if (headerAvatarEl) headerAvatarEl.src = userDataProfile.photoUrl;
+            if (setAvatarEl) setAvatarEl.src = userDataProfile.photoUrl;
+            if (setQrisEl) setQrisEl.src = userDataProfile.qrisUrl;
+            if (qrisDisplay) qrisDisplay.src = userDataProfile.qrisUrl;
 
-    // Hanya ambil Nama Toko dan No HP yang bisa diubah oleh user
-    userDataProfile.storeName = document.getElementById('setStoreNameInput').value.trim();
-    userDataProfile.phone = document.getElementById('setPhoneInput').value.trim();
-    
-    // Email dipastikan tetap menggunakan email yang sedang aktif login/terdaftar
-    userDataProfile.email = currentUser.email;
-
-    // Simpan ke database Firebase
-    set(ref(db, `users/${currentUser.uid}/profile`), userDataProfile).then(() => {
-        updateUIProfile();
-        showPopup('Berhasil', 'Profil toko berhasil diperbarui dan disimpan.', 'success');
-    }).catch((err) => {
-        showPopup('Gagal', err.message, 'error');
-    });
-};
-
+            // Pengisian nilai inputan formulir Pengaturan
+            if (nameInput) nameInput.value = userDataProfile.storeName || '';
+            if (phoneInput) phoneInput.value = userDataProfile.phone || '';
+        }
 
         window.switchView = function(viewId, el) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             el.classList.add('active');
+
+            if (viewId === 'viewPengaturan') {
+                updateUIProfile();
+            }
         };
 
         window.showPopup = function(title, msg, type = 'info') {
@@ -1740,7 +1716,6 @@ window.saveProfileSettingsManually = function(e) {
             }
         };
 
-        /* --- FUNGSI SCANNER KAMERA --- */
         window.openScanner = function(target) {
             if (!checkSubscriptionAccess()) return;
             activeScannerTarget = target;
@@ -1752,8 +1727,7 @@ window.saveProfileSettingsManually = function(e) {
                 }
                 html5QrCodeScanner.start(
                     { facingMode: "environment" },
-                    { fps: 10, qrbox: { width: 4096, height: 2160 }
-                    },
+                    { fps: 10, qrbox: { width: 4096, height: 2160 } },
                     (decodedText) => {
                         handleSuccessfulScan(decodedText);
                     },
@@ -1810,7 +1784,6 @@ window.saveProfileSettingsManually = function(e) {
             }
         }
 
-        /* --- RENDER RIWAYAT & STRUK DETAIL PREMIUM --- */
         function renderHistory() {
             const transContainer = document.getElementById('historyTransList');
             const strukContainer = document.getElementById('historyStrukList');
@@ -1824,7 +1797,7 @@ window.saveProfileSettingsManually = function(e) {
             let transHtml = '';
             let strukHtml = '';
 
-            transactionsData.slice().reverse().forEach((t, idx) => {
+            transactionsData.slice().reverse().forEach((t) => {
                 const dateObj = new Date(t.date);
                 const dateStr = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                 const invoiceNo = 'INV/' + dateObj.getTime().toString().slice(-6);
@@ -1889,11 +1862,31 @@ window.saveProfileSettingsManually = function(e) {
         }
 
         window.autoSaveProfileSettings = function() {
-            userDataProfile.storeName = document.getElementById('setStoreNameInput').value;
-            userDataProfile.phone = document.getElementById('setPhoneInput').value;
-            set(ref(db, `users/${currentUser.uid}/profile`), userDataProfile).then(() => {
-                updateUIProfile();
-            });
+            const storeNameVal = document.getElementById('setStoreNameInput').value.trim();
+            const phoneVal = document.getElementById('setPhoneInput').value.trim();
+
+            if (!storeNameVal || !phoneVal) {
+                showPopup('Peringatan', 'Nama Toko dan Nomor HP tidak boleh kosong.', 'error');
+                return;
+            }
+
+            userDataProfile.storeName = storeNameVal;
+            userDataProfile.phone = phoneVal;
+
+            if (currentUser) {
+                set(ref(db, `users/${currentUser.uid}/profile`), {
+                    storeName: userDataProfile.storeName,
+                    phone: userDataProfile.phone,
+                    photoUrl: userDataProfile.photoUrl,
+                    qrisUrl: userDataProfile.qrisUrl,
+                    email: currentUser.email
+                }).then(() => {
+                    updateUIProfile();
+                    showPopup('Berhasil', 'Identitas toko berhasil diperbarui!', 'success');
+                }).catch((err) => {
+                    showPopup('Gagal', err.message, 'error');
+                });
+            }
         };
 
         window.handleUploadPhoto = function(e, type) {
@@ -1906,10 +1899,12 @@ window.saveProfileSettingsManually = function(e) {
                     } else if (type === 'qris') {
                         userDataProfile.qrisUrl = event.target.result;
                     }
-                    set(ref(db, `users/${currentUser.uid}/profile`), userDataProfile).then(() => {
-                        updateUIProfile();
-                        showPopup('Sukses', 'Foto berhasil diunggah & diperbarui.', 'success');
-                    });
+                    if (currentUser) {
+                        set(ref(db, `users/${currentUser.uid}/profile`), userDataProfile).then(() => {
+                            updateUIProfile();
+                            showPopup('Sukses', 'Foto berhasil diunggah & diperbarui.', 'success');
+                        });
+                    }
                 };
                 reader.readAsDataURL(file);
             }
@@ -1922,15 +1917,14 @@ window.saveProfileSettingsManually = function(e) {
                 });
             }
         };
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((reg) => console.log('Service Worker terdaftar!', reg))
-      .catch((err) => console.log('Gagal daftar Service Worker:', err));
-  });
-}
 
-
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                .then((reg) => console.log('Service Worker terdaftar!', reg))
+                .catch((err) => console.log('Gagal daftar Service Worker:', err));
+            });
+        }
     </script>
 </body>
 </html>
