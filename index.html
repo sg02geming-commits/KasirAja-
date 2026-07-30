@@ -43,24 +43,23 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         #app {
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             background: var(--bg-main);
             position: relative;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            margin: 0 auto;
         }
 
-        /* --- AUTH SCREENS (LOGIN & REGISTER TERPISAH) --- */
+        /* --- AUTH SCREENS --- */
         .auth-container {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -70,9 +69,20 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             padding: 1.5rem;
             overflow-y: auto;
             transition: var(--transition);
+        }
+
+        .auth-card-wrapper {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         .auth-container.hidden {
@@ -117,7 +127,7 @@
         .form-control {
             width: 100%;
             padding: 0.85rem 1rem;
-            background: var(--bg-card);
+            background: var(--bg-input);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             color: var(--text-main);
@@ -172,7 +182,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.85rem 1rem;
+            padding: 1rem 1.5rem;
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
             z-index: 10;
@@ -185,26 +195,26 @@
         }
 
         .user-avatar-mini {
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
         }
 
         .user-info-mini h4 {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
         }
 
         .user-info-mini p {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
         .icon-btn {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--bg-input);
             border: 1px solid var(--border);
@@ -233,14 +243,16 @@
         /* --- VIEWS --- */
         .views-container {
             flex: 1;
-            overflow-y: auto;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
             position: relative;
-            padding-bottom: 105px;
+            padding: 1.5rem;
+            padding-bottom: 120px;
         }
 
         .view-section {
             display: none;
-            padding: 1rem;
             animation: fadeIn 0.2s ease;
         }
 
@@ -255,20 +267,19 @@
 
         /* --- BOTTOM NAVIGATION --- */
         .bottom-nav {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 90px;
-            padding-bottom: 10px;
-            background: #00000000;
-            border-top: 10px;
-            color: #5b5b5b9a;
+            height: 75px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-around;
             align-items: center;
             z-index: 100;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+            overflow-x: auto;
         }
 
         .nav-item {
@@ -276,17 +287,19 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-width: 55px;
             flex: 1;
             height: 100%;
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
-            font-size: 0.7rem;
-            gap: 4px;
+            font-size: 0.65rem;
+            gap: 3px;
+            white-space: nowrap;
         }
 
         .nav-item i {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             transition: var(--transition);
         }
 
@@ -295,50 +308,62 @@
         }
 
         /* --- DASHBOARD --- */
+        .dash-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 992px) {
+            .dash-layout {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
         .dash-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 1rem;
-            margin-bottom: 0.85rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
         }
 
         .dash-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 0.85rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .stat-box {
             background: var(--bg-input);
-            padding: 0.85rem;
+            padding: 1rem;
             border-radius: var(--radius);
             border: 1px solid var(--border);
         }
 
         .stat-box h5 {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
             font-weight: 500;
         }
 
         .stat-box h3 {
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .chart-container {
             width: 100%;
-            height: 175px;
+            height: 220px;
             display: flex;
             align-items: flex-end;
-            gap: 6px;
-            padding-top: 1.75rem;
+            gap: 8px;
+            padding-top: 2rem;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .chart-bar-wrap {
@@ -352,15 +377,15 @@
         }
 
         .chart-value-label {
-            font-size: 0.5rem;
+            font-size: 0.6rem;
             color: #818cf8;
             font-weight: 700;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             white-space: nowrap;
             transform: rotate(-35deg);
             transform-origin: bottom center;
             position: absolute;
-            bottom: calc(100% + 2px);
+            bottom: calc(100% + 4px);
         }
 
         .chart-bar {
@@ -370,24 +395,55 @@
             transition: height 0.3s ease;
         }
 
-        /* --- KASIR (POS) --- */
+        /* --- KASIR --- */
+        .pos-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 1024px) {
+            .pos-container {
+                grid-template-columns: 1.2fr 1fr;
+                align-items: start;
+            }
+        }
+
         .pos-grid-catalog {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.65rem;
-            max-height: 180px;
+            gap: 0.75rem;
+            max-height: 380px;
             overflow-y: auto;
-            margin-bottom: 0.85rem;
-            padding-right: 2px;
+            margin-bottom: 1rem;
+            padding-right: 4px;
+        }
+
+        @media (min-width: 768px) {
+            .pos-grid-catalog {
+                grid-template-columns: repeat(3, 1fr);
+                max-height: 480px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .pos-grid-catalog {
+                grid-template-columns: repeat(2, 1fr);
+                max-height: 520px;
+            }
         }
 
         .pos-catalog-item {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 0.65rem;
+            padding: 0.85rem;
             cursor: pointer;
             transition: var(--transition);
+        }
+
+        .pos-catalog-item:hover {
+            border-color: var(--primary);
         }
 
         .pos-catalog-item:active {
@@ -395,16 +451,16 @@
         }
 
         .pos-catalog-item h5 {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.25rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .pos-catalog-item p {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             color: var(--accent);
             font-weight: 600;
         }
@@ -413,9 +469,9 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 0.85rem;
-            margin-bottom: 0.85rem;
-            max-height: 140px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            max-height: 220px;
             overflow-y: auto;
         }
 
@@ -423,21 +479,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.4rem;
-            font-size: 0.8rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 0.35rem;
+            padding-bottom: 0.5rem;
         }
 
         .payment-methods {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.65rem;
-            margin-bottom: 0.85rem;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .pay-btn {
-            padding: 0.65rem;
+            padding: 0.75rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -445,7 +501,7 @@
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: var(--transition);
         }
 
@@ -455,32 +511,81 @@
             color: #818cf8;
         }
 
+        /* --- QUICK CASH BUTTONS --- */
+        .quick-cash-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-cash-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .quick-cash-btn:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .quick-cash-btn.exact {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
         /* --- PRODUK --- */
+        .product-grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .product-grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .product-grid-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         .product-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 0.75rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.65rem;
         }
 
         .product-info h4 {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.2rem;
         }
 
         .product-info p {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
         }
 
         .btn-sm {
-            padding: 0.35rem 0.65rem;
-            font-size: 0.7rem;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
             border-radius: 6px;
             border: none;
             cursor: pointer;
@@ -489,22 +594,28 @@
 
         /* --- PENGATURAN --- */
         .settings-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0.85rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .settings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .setting-box {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 1rem;
+            padding: 1.25rem;
         }
 
         .setting-box h4 {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 0.85rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -514,21 +625,21 @@
         .upload-preview-wrap {
             display: flex;
             align-items: center;
-            gap: 0.85rem;
-            margin-bottom: 0.85rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .preview-img {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
         }
 
         .preview-img-qris {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 10px;
             object-fit: cover;
             border: 2px solid var(--primary);
@@ -536,7 +647,7 @@
 
         /* --- MODALS --- */
         .modal-overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -563,8 +674,8 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             width: 100%;
-            max-width: 360px;
-            padding: 1.25rem;
+            max-width: 400px;
+            padding: 1.5rem;
             text-align: center;
             transform: scale(0.92);
             transition: var(--transition);
@@ -580,19 +691,37 @@
         }
 
         .modal-icon {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             background: rgba(99, 102, 241, 0.15);
             color: #818cf8;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
-            margin: 0 auto 0.75rem;
+            font-size: 1.3rem;
+            margin: 0 auto 0.85rem;
         }
 
         /* --- STRUK THERMAL DIGITAL PREMIUM --- */
+        .history-grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .history-grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .history-grid-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         .thermal-receipt {
             background: #ffffff;
             color: #1a1a1a;
@@ -601,7 +730,6 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.8rem;
             text-align: left;
-            margin-bottom: 1rem;
             box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             border: 1px solid #e2e8f0;
             position: relative;
@@ -654,11 +782,11 @@
 
         #interactive {
             width: 100%;
-            min-height: 220px;
+            min-height: 240px;
             background: #000;
             border-radius: var(--radius);
             overflow: hidden;
-            margin-bottom: 0.85rem;
+            margin-bottom: 1rem;
             border: 2px solid var(--primary);
         }
         #interactive video {
@@ -673,57 +801,61 @@
     <div id="app">
         <!-- HALAMAN MASUK (LOGIN) -->
         <div id="loginScreen" class="auth-container">
-            <div class="auth-header">
-                <h1>Asisten Toko</h1>
-                <p>Masuk untuk mengelola tokomu dengan presisi</p>
-            </div>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Email Terdaftar</label>
-                    <input type="email" id="loginEmail" class="form-control" required placeholder="nama@toko.com">
+            <div class="auth-card-wrapper">
+                <div class="auth-header">
+                    <h1>Asisten Toko</h1>
+                    <p>Masuk untuk mengelola tokomu dengan presisi</p>
                 </div>
-                <div class="form-group">
-                    <label>Kata Sandi</label>
-                    <input type="password" id="loginPassword" class="form-control" required placeholder="••••••••">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Terdaftar</label>
+                        <input type="email" id="loginEmail" class="form-control" required placeholder="nama@toko.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Kata Sandi</label>
+                        <input type="password" id="loginPassword" class="form-control" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk Aplikasi
+                    </button>
+                </form>
+                <div class="auth-switch">
+                    <span>Belum punya akun toko? <b onclick="switchToRegister()">Daftar di sini</b></span>
                 </div>
-                <button type="submit" class="btn">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk Aplikasi
-                </button>
-            </form>
-            <div class="auth-switch">
-                <span>Belum punya akun toko? <b onclick="switchToRegister()" style="color: #818cf8; cursor: pointer;">Daftar di sini</b></span>
             </div>
         </div>
 
-        <!-- HALAMAN DAFTAR (REGISTER DENGAN IDENTITAS TOKO) -->
+        <!-- HALAMAN DAFTAR (REGISTER) -->
         <div id="registerScreen" class="auth-container hidden">
-            <div class="auth-header">
-                <h1>Pendaftaran Toko</h1>
-                <p>Buat identitas tokomu dan mulai kelola bisnis</p>
-            </div>
-            <form id="registerForm" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label>Nama Toko</label>
-                    <input type="text" id="regStoreName" class="form-control" required placeholder="Nama Toko Anda">
+            <div class="auth-card-wrapper">
+                <div class="auth-header">
+                    <h1>Pendaftaran Toko</h1>
+                    <p>Buat identitas tokomu dan mulai kelola bisnis</p>
                 </div>
-                <div class="form-group">
-                    <label>Nomor HP / WhatsApp Toko</label>
-                    <input type="text" id="regPhone" class="form-control" required placeholder="08xxxxxxxxxx">
+                <form id="registerForm" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Nama Toko</label>
+                        <input type="text" id="regStoreName" class="form-control" required placeholder="Nama Toko Anda">
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor HP / WhatsApp Toko</label>
+                        <input type="text" id="regPhone" class="form-control" required placeholder="08xxxxxxxxxx">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Toko</label>
+                        <input type="email" id="regEmail" class="form-control" required placeholder="nama@toko.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Kata Sandi</label>
+                        <input type="password" id="regPassword" class="form-control" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn">
+                        <i class="fa-solid fa-user-plus"></i> Daftar & Kirim Verifikasi
+                    </button>
+                </form>
+                <div class="auth-switch">
+                    <span>Sudah punya akun? <b onclick="switchToLogin()">Masuk di sini</b></span>
                 </div>
-                <div class="form-group">
-                    <label>Email Toko</label>
-                    <input type="email" id="regEmail" class="form-control" required placeholder="nama@toko.com">
-                </div>
-                <div class="form-group">
-                    <label>Kata Sandi</label>
-                    <input type="password" id="regPassword" class="form-control" required placeholder="••••••••">
-                </div>
-                <button type="submit" class="btn">
-                    <i class="fa-solid fa-user-plus"></i> Daftar & Kirim Verifikasi
-                </button>
-            </form>
-            <div class="auth-switch">
-                <span>Sudah punya akun? <b onclick="switchToLogin()" style="color: #818cf8; cursor: pointer;">Masuk di sini</b></span>
             </div>
         </div>
 
@@ -749,108 +881,155 @@
             
             <!-- DASHBOARD -->
             <section id="viewDash" class="view-section active">
-                <div class="dash-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                        <h4 id="chartTitleLabel" style="margin-bottom:0;"><i class="fa-solid fa-chart-line text-accent"></i> Grafik Omzet Minggu Ini</h4>
-                        <button class="btn-sm" style="background: var(--primary); color: white; display: flex; align-items: center; gap: 4px;" onclick="openChartHistoryModal()">
-                            <i class="fa-solid fa-calendar-days"></i> History Grafik
-                        </button>
-                    </div>
-                    <div class="chart-container" id="dashChart"></div>
-                </div>
-
-                <div class="dash-grid">
-                    <div class="stat-box">
-                        <h5>Omzet Minggu Ini</h5>
-                        <h3 id="statWeeklyOmzet">Rp 0</h3>
-                    </div>
-                    <div class="stat-box">
-                        <h5>Omzet Bulan Ini</h5>
-                        <h3 id="statMonthlyOmzet">Rp 0</h3>
-                    </div>
-                </div>
-
-                <div class="dash-card">
-                    <h4 class="mb-2"><i class="fa-solid fa-box-archive text-danger"></i> Produk Sold Out</h4>
-                    <div class="stat-box mb-2" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h5 style="margin-bottom:0;">Total Varian Habis</h5>
-                            <h3 id="statTotalSoldout" class="text-danger">0 Item</h3>
+                <div class="dash-layout">
+                    <div class="dash-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h4 id="chartTitleLabel" style="margin-bottom:0;"><i class="fa-solid fa-chart-line text-accent"></i> Grafik Omzet Minggu Ini</h4>
+                            <button class="btn-sm" style="background: var(--primary); color: white; display: flex; align-items: center; gap: 4px;" onclick="openChartHistoryModal()">
+                                <i class="fa-solid fa-calendar-days"></i> History Grafik
+                            </button>
                         </div>
-                        <i class="fa-solid fa-triangle-exclamation text-danger" style="font-size: 1.2rem;"></i>
+                        <div class="chart-container" id="dashChart"></div>
                     </div>
-                    <div id="dashSoldoutList" style="max-height: 100px; overflow-y: auto;"></div>
+
+                    <div>
+                        <div class="dash-grid" style="grid-template-columns: 1fr; margin-bottom: 1rem;">
+                            <div class="stat-box">
+                                <h5>Omzet Minggu Ini</h5>
+                                <h3 id="statWeeklyOmzet">Rp 0</h3>
+                            </div>
+                            <div class="stat-box" style="margin-top: 0.5rem;">
+                                <h5>Omzet Bulan Ini</h5>
+                                <h3 id="statMonthlyOmzet">Rp 0</h3>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <h4 class="mb-2"><i class="fa-solid fa-box-archive text-danger"></i> Produk Sold Out</h4>
+                            <div class="stat-box mb-2" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h5 style="margin-bottom:0;">Total Varian Habis</h5>
+                                    <h3 id="statTotalSoldout" class="text-danger">0 Item</h3>
+                                </div>
+                                <i class="fa-solid fa-triangle-exclamation text-danger" style="font-size: 1.2rem;"></i>
+                            </div>
+                            <div id="dashSoldoutList" style="max-height: 120px; overflow-y: auto;"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- KASIR -->
             <section id="viewKasir" class="view-section">
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.65rem;">
-                    <input type="text" id="posBarcodeScanInput" class="form-control" placeholder="Scan Barcode / Ketik Kode..." onkeypress="handlePosBarcodeKey(event)">
-                    <button class="btn" style="width: auto; padding: 0 1rem;" onclick="openScanner('pos')"><i class="fa-solid fa-barcode"></i></button>
-                </div>
+                <div class="pos-container">
+                    <!-- SISI KIRI: KATALOG & SCANNER -->
+                    <div>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem;">
+                            <input type="text" id="posBarcodeScanInput" class="form-control" placeholder="Scan Barcode / Ketik Kode..." onkeypress="handlePosBarcodeKey(event)">
+                            <button class="btn" style="width: auto; padding: 0 1.2rem;" onclick="openScanner('pos')"><i class="fa-solid fa-barcode"></i></button>
+                        </div>
 
-                <h5 style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem;">PILIH PRODUK DARI KATALOG:</h5>
-                <div class="pos-grid-catalog" id="posCatalogGrid"></div>
-
-                <h5 style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem;">KERANJANG BELANJA:</h5>
-                <div class="pos-cart-box" id="posCartList">
-                    <p style="text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 0.4rem;">Belum ada produk di keranjang</p>
-                </div>
-
-                <div class="dash-card" style="padding: 0.75rem; margin-bottom: 0.65rem;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.2rem;">
-                        <span style="color: var(--text-muted);">Total Item:</span>
-                        <span id="posTotalQty" style="font-weight: 600;">0</span>
+                        <h5 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">PILIH PRODUK DARI KATALOG:</h5>
+                        <div class="pos-grid-catalog" id="posCatalogGrid"></div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 1rem; font-weight: 700; color: var(--accent);">
-                        <span>Total Tagihan:</span>
-                        <span id="posTotalPrice">Rp 0</span>
+
+                    <!-- SISI KANAN: KERANJANG & PEMBAYARAN -->
+                    <div>
+                        <h5 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">KERANJANG BELANJA:</h5>
+                        <div class="pos-cart-box" id="posCartList">
+                            <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">Belum ada produk di keranjang</p>
+                        </div>
+
+                        <div class="dash-card" style="padding: 1rem; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.3rem;">
+                                <span style="color: var(--text-muted);">Total Item:</span>
+                                <span id="posTotalQty" style="font-weight: 600;">0</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; color: var(--accent);">
+                                <span>Total Tagihan:</span>
+                                <span id="posTotalPrice">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <div class="payment-methods">
+                            <div class="pay-btn active" id="payMethodCash" onclick="setPaymentMethod('cash')"><i class="fa-solid fa-money-bill-wave"></i> Tunai</div>
+                            <div class="pay-btn" id="payMethodQris" onclick="setPaymentMethod('qris')"><i class="fa-solid fa-qrcode"></i> QRIS</div>
+                        </div>
+
+                        <div id="cashPaymentSection">
+<!-- TOMBOL PINTASAN NOMINAL UANG -->
+<div class="form-group" style="margin-bottom: 0.6rem;">
+    <label>Pilih Nominal Cepat:</label>
+    <div class="quick-cash-grid" style="grid-template-columns: repeat(4, 1fr);">
+        <button type="button" class="quick-cash-btn exact" onclick="setExactCash()" style="grid-column: span 4;">Uang Pas</button>
+        <button type="button" class="quick-cash-btn" onclick="addQuickCash(2000)">+ 2rb</button>
+        <button type="button" class="quick-cash-btn" onclick="addQuickCash(5000)">+ 5rb</button>
+        <button type="button" class="quick-cash-btn" onclick="addQuickCash(10000)">+ 10rb</button>
+        <button type="button" class="quick-cash-btn" onclick="addQuickCash(20000)">+ 20rb</button>
+        <button type="button" class="quick-cash-btn" onclick="addQuickCash(50000)">+ 50rb</button>
+        <button type="button" class="quick-cash-btn" onclick="addQuickCash(100000)" style="grid-column: span 2;">+ 100rb</button>
+    </div>
+</div>
+
+
+
+                            <div class="form-group">
+                                <label>Uang Dibayarkan (Tunai)</label>
+                                <input type="text" id="posCashInput" class="form-control" placeholder="0" oninput="formatRupiahInput(this); calculateChange()">
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                <span style="color: var(--text-muted);">Kembalian:</span>
+                                <span id="posChangeAmount" style="font-weight: 700; color: var(--accent);">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <div id="qrisPaymentSection" style="display: none; text-align: center; margin-bottom: 1rem;">
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Scan QRIS di bawah ini untuk pembayaran</p>
+                            <img id="qrisDisplayImage" src="https://via.placeholder.com/200" alt="QRIS" style="width: 220px; height: 220px; border-radius: 10px; border: 2px solid var(--primary); object-fit: cover; margin: 0 auto;">
+                        </div>
+
+                        <button class="btn" onclick="processCheckout()"><i class="fa-solid fa-check"></i> Selesaikan Transaksi</button>
                     </div>
                 </div>
-
-                <div class="payment-methods">
-                    <div class="pay-btn active" id="payMethodCash" onclick="setPaymentMethod('cash')"><i class="fa-solid fa-money-bill-wave"></i> Tunai</div>
-                    <div class="pay-btn" id="payMethodQris" onclick="setPaymentMethod('qris')"><i class="fa-solid fa-qrcode"></i> QRIS</div>
-                </div>
-
-                <div id="cashPaymentSection">
-                    <div class="form-group">
-                        <label>Uang Dibayarkan (Tunai)</label>
-                        <input type="text" id="posCashInput" class="form-control" placeholder="0" oninput="formatRupiahInput(this); calculateChange()">
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.85rem; font-size: 0.85rem;">
-                        <span style="color: var(--text-muted);">Kembalian:</span>
-                        <span id="posChangeAmount" style="font-weight: 700; color: var(--accent);">Rp 0</span>
-                    </div>
-                </div>
-
-                <div id="qrisPaymentSection" style="display: none; text-align: center; margin-bottom: 0.85rem;">
-                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem;">Scan QRIS di bawah ini untuk pembayaran</p>
-                    <img id="qrisDisplayImage" src="https://via.placeholder.com/200" alt="QRIS" style="width: 400px; height: 400px; border-radius: 10px; border: 2px solid var(--primary); object-fit: cover;">
-                </div>
-
-                <button class="btn" onclick="processCheckout()"><i class="fa-solid fa-check"></i> Selesaikan Transaksi</button>
             </section>
 
             <!-- PRODUK -->
             <section id="viewProduk" class="view-section">
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem;">
-                    <button class="btn" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Tambah Produk Baru</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="font-size: 1.1rem;"><i class="fa-solid fa-boxes-stacked text-accent"></i> Manajemen Produk</h4>
+                    <button class="btn" style="width: auto; padding: 0.7rem 1.2rem;" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Tambah Produk Baru</button>
                 </div>
-                <div id="productListContainer"></div>
+                <div class="product-grid-container" id="productListContainer"></div>
+            </section>
+
+            <!-- PENGELUARAN (STOK GAS, DLL) -->
+            <section id="viewPengeluaran" class="view-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="font-size: 1.1rem;"><i class="fa-solid fa-wallet text-warning"></i> Catatan Pengeluaran Toko</h4>
+                    <button class="btn" style="width: auto; padding: 0.7rem 1.2rem; background: var(--warning); color: #000;" onclick="openExpenseModal()"><i class="fa-solid fa-plus"></i> Catat Pengeluaran</button>
+                </div>
+
+                <div class="dash-card" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h5 style="color: var(--text-muted); font-size: 0.8rem;">Total Pengeluaran Bulan Ini</h5>
+                        <h3 id="statTotalExpense" style="color: var(--danger); font-size: 1.4rem;">Rp 0</h3>
+                    </div>
+                    <i class="fa-solid fa-file-invoice-dollar" style="font-size: 2rem; color: var(--warning); opacity: 0.8;"></i>
+                </div>
+
+                <div class="product-grid-container" id="expenseListContainer"></div>
             </section>
 
             <!-- HISTORY TRANSAKSI -->
             <section id="viewHistoryTrans" class="view-section">
                 <h4 class="mb-2"><i class="fa-solid fa-clock-rotate-left text-accent"></i> Riwayat Transaksi</h4>
-                <div id="historyTransList"></div>
+                <div class="product-grid-container" id="historyTransList"></div>
             </section>
 
             <!-- HISTORY STRUK -->
             <section id="viewHistoryStruk" class="view-section">
                 <h4 class="mb-2"><i class="fa-solid fa-receipt text-accent"></i> Arsip Struk Digital</h4>
-                <div id="historyStrukList"></div>
+                <div class="history-grid-container" id="historyStrukList"></div>
             </section>
 
             <!-- PENGATURAN -->
@@ -866,7 +1045,7 @@
                                     <i class="fa-solid fa-upload"></i> Upload Foto Profil
                                     <input type="file" accept="image/*" style="display: none;" onchange="handleUploadPhoto(event, 'profile')">
                                 </label>
-                                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 3px;">PNG, JPG maks 2MB</p>
+                                <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">PNG, JPG maks 2MB</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -877,7 +1056,7 @@
                             <label>Nomor HP / WhatsApp</label>
                             <input type="text" id="setPhoneInput" class="form-control" onchange="autoSaveProfileSettings()">
                         </div>
-                        <button class="btn mt-2" style="padding: 0.6rem; font-size: 0.85rem;" onclick="autoSaveProfileSettings()">
+                        <button class="btn mt-2" style="padding: 0.7rem; font-size: 0.9rem;" onclick="autoSaveProfileSettings()">
                             <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Toko
                         </button>
                     </div>
@@ -891,24 +1070,24 @@
                                     <i class="fa-solid fa-upload"></i> Upload Foto QRIS
                                     <input type="file" accept="image/*" style="display: none;" onchange="handleUploadPhoto(event, 'qris')">
                                 </label>
-                                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 3px;">Perbarui QRIS toko Anda</p>
+                                <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Perbarui QRIS toko Anda</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="setting-box">
                         <h4><i class="fa-solid fa-database"></i> Pengelolaan Data</h4>
-                        <button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 0.65rem;" onclick="confirmResetData()">
+                        <button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 0.75rem;" onclick="confirmResetData()">
                             <i class="fa-solid fa-rotate-left text-warning"></i> Reset Data (Kecuali Produk)
                         </button>
                     </div>
 
                     <div class="setting-box">
                         <h4><i class="fa-solid fa-circle-info"></i> Lainnya</h4>
-                        <a href="tentang-kami.html" class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 0.65rem; text-decoration: none;">
+                        <a href="tentang-kami.html" class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 0.75rem; text-decoration: none;">
                             <i class="fa-solid fa-info-circle"></i> Tentang Kami
                         </a>
-                        <a href="laporkan-masalah.html" class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 0.65rem; text-decoration: none;">
+                        <a href="laporkan-masalah.html" class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); margin-bottom: 0.75rem; text-decoration: none;">
                             <i class="fa-solid fa-triangle-exclamation"></i> Laporkan Masalah
                         </a>
                         <button class="btn" style="background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3);" onclick="confirmLogout()">
@@ -935,9 +1114,13 @@
                 <i class="fa-solid fa-boxes-stacked"></i>
                 <span>Produk</span>
             </div>
+            <div class="nav-item" onclick="switchView('viewPengeluaran', this)">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Biaya</span>
+            </div>
             <div class="nav-item" onclick="switchView('viewHistoryTrans', this)">
                 <i class="fa-solid fa-clock-rotate-left"></i>
-                <span>Transaksi</span>
+                <span>Riwayat</span>
             </div>
             <div class="nav-item" onclick="switchView('viewHistoryStruk', this)">
                 <i class="fa-solid fa-receipt"></i>
@@ -945,7 +1128,7 @@
             </div>
             <div class="nav-item" onclick="switchView('viewPengaturan', this)">
                 <i class="fa-solid fa-gear"></i>
-                <span>Pengaturan</span>
+                <span>Setting</span>
             </div>
         </nav>
 
@@ -954,7 +1137,7 @@
             <div class="modal-card">
                 <div class="modal-icon" id="modalIcon"><i class="fa-solid fa-bell"></i></div>
                 <h3 id="modalTitle">Informasi</h3>
-                <p id="modalMessage" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Pesan sistem...</p>
+                <p id="modalMessage" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Pesan sistem...</p>
                 <button class="btn" onclick="closeModal()">Mengerti</button>
             </div>
         </div>
@@ -966,10 +1149,10 @@
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </div>
                 <h3>Konfirmasi Keluar</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
                     Apakah Anda yakin ingin keluar dari akun ini? Sesi Anda akan diakhiri.
                 </p>
-                <div style="display: flex; gap: 0.5rem;">
+                <div style="display: flex; gap: 0.75rem;">
                     <button class="btn" style="background: var(--danger); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);" onclick="handleLogout()">Ya, Keluar</button>
                     <button class="btn" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); box-shadow: none;" onclick="closeLogoutModal()">Batal</button>
                 </div>
@@ -978,32 +1161,32 @@
 
         <!-- MODAL PILIH HISTORY GRAFIK -->
         <div class="modal-overlay" id="chartHistoryModal">
-            <div class="modal-card" style="max-width: 360px; text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
-                    <h3 style="font-size: 1rem;"><i class="fa-solid fa-calendar-days text-accent"></i> Pilih Tanggal Grafik</h3>
+            <div class="modal-card" style="max-width: 380px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-calendar-days text-accent"></i> Pilih Tanggal Grafik</h3>
                     <button class="btn-sm" style="background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border);" onclick="closeChartHistoryModal()">Tutup</button>
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); font-size: 0.85rem; padding: 0.65rem;" onclick="resetChartToDefault()">
+                    <button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); font-size: 0.9rem; padding: 0.75rem;" onclick="resetChartToDefault()">
                         <i class="fa-solid fa-rotate-left"></i> Kembali ke Grafik Minggu Ini
                     </button>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Atau pilih berdasarkan tanggal riwayat transaksi:</p>
-                <div id="chartHistoryDateList" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
-                    <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">Belum ada data tanggal.</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Atau pilih berdasarkan tanggal riwayat transaksi:</p>
+                <div id="chartHistoryDateList" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1rem;">Belum ada data tanggal.</p>
                 </div>
             </div>
         </div>
 
         <!-- MODAL PUSAT NOTIFIKASI -->
         <div class="modal-overlay" id="notificationModal">
-            <div class="modal-card" style="max-width: 360px; text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
-                    <h3 style="font-size: 1rem;"><i class="fa-solid fa-bell text-accent"></i> Pusat Notifikasi</h3>
+            <div class="modal-card" style="max-width: 380px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-bell text-accent"></i> Pusat Notifikasi</h3>
                     <button class="btn-sm" style="background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border);" onclick="closeNotificationModal()">Tutup</button>
                 </div>
-                <div id="notificationListContainer" style="max-height: 250px; overflow-y: auto; margin-bottom: 1rem;">
-                    <p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1.5rem;">Belum ada pesan notifikasi.</p>
+                <div id="notificationListContainer" style="max-height: 250px; overflow-y: auto; margin-bottom: 1.25rem;">
+                    <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1.5rem;">Belum ada pesan notifikasi.</p>
                 </div>
                 <button class="btn" onclick="markAllNotificationsAsRead()">Tandai Sudah Dibaca</button>
             </div>
@@ -1011,9 +1194,9 @@
 
         <!-- SCANNER MODAL -->
         <div class="modal-overlay" id="scannerModal">
-            <div class="modal-card" style="max-width: 380px;">
+            <div class="modal-card" style="max-width: 420px;">
                 <h3>Scan Barcode Kamera</h3>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.85rem;">Arahkan kamera belakang ke barcode barang</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Arahkan kamera belakang ke barcode barang</p>
                 <div id="interactive"></div>
                 <button class="btn mt-2" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border);" onclick="closeScanner()">Batal / Tutup</button>
             </div>
@@ -1021,15 +1204,15 @@
 
         <!-- PRODUCT FORM MODAL -->
         <div class="modal-overlay" id="productModal">
-            <div class="modal-card" style="max-width: 340px; text-align: left;">
-                <h3 id="productModalTitle" style="text-align: center; margin-bottom: 0.85rem;">Tambah Produk</h3>
+            <div class="modal-card" style="max-width: 380px; text-align: left;">
+                <h3 id="productModalTitle" style="text-align: center; margin-bottom: 1rem;">Tambah Produk</h3>
                 <form id="productForm" onsubmit="saveProduct(event)">
                     <input type="hidden" id="prodEditId">
                     <div class="form-group">
                         <label>Kode / Barcode</label>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id="prodCode" class="form-control" required placeholder="Contoh: 89912345">
-                            <button type="button" class="btn" style="width: auto; padding: 0 1rem;" onclick="openScanner('productForm')"><i class="fa-solid fa-barcode"></i></button>
+                            <button type="button" class="btn" style="width: auto; padding: 0 1.2rem;" onclick="openScanner('productForm')"><i class="fa-solid fa-barcode"></i></button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1044,9 +1227,30 @@
                         <label>Stok Barang</label>
                         <input type="number" id="prodStock" class="form-control" required placeholder="0">
                     </div>
-                    <div style="display: flex; gap: 0.5rem;">
+                    <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
                         <button type="submit" class="btn">Simpan</button>
                         <button type="button" class="btn" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border);" onclick="closeProductModal()">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- EXPENSE FORM MODAL -->
+        <div class="modal-overlay" id="expenseModal">
+            <div class="modal-card" style="max-width: 380px; text-align: left;">
+                <h3 style="text-align: center; margin-bottom: 1rem;">Catat Pengeluaran Baru</h3>
+                <form id="expenseForm" onsubmit="saveExpense(event)">
+                    <div class="form-group">
+                        <label>Nama Pengeluaran (Contoh: Stok Gas, Listrik, Plastik)</label>
+                        <input type="text" id="expName" class="form-control" required placeholder="Misal: Stok Gas 3kg">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Biaya (Rp)</label>
+                        <input type="text" id="expAmount" class="form-control" required placeholder="0" oninput="formatRupiahInput(this)">
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+                        <button type="submit" class="btn" style="background: var(--warning); color: #000;">Simpan Biaya</button>
+                        <button type="button" class="btn" style="background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border);" onclick="closeExpenseModal()">Batal</button>
                     </div>
                 </form>
             </div>
@@ -1081,6 +1285,7 @@
         let paymentMethod = 'cash';
         let productsData = [];
         let transactionsData = [];
+        let expensesData = [];
         let globalSubscriptionStatus = "aktif"; 
         let userDataProfile = { storeName: "Toko Berkah", phone: "08123456789", photoUrl: "https://via.placeholder.com/150", qrisUrl: "https://via.placeholder.com/200" };
         let latestAdminNotification = null;
@@ -1210,12 +1415,14 @@
                     }
                     productsData = data.products ? Object.keys(data.products).map(k => ({id: k, ...data.products[k]})) : [];
                     transactionsData = data.transactions ? Object.keys(data.transactions).map(k => ({id: k, ...data.transactions[k]})) : [];
+                    expensesData = data.expenses ? Object.keys(data.expenses).map(k => ({id: k, ...data.expenses[k]})) : [];
                     
                     updateUIProfile();
                     renderProducts();
                     renderPosCatalog();
                     renderDashboard();
                     renderHistory();
+                    renderExpenses();
                 } else {
                     set(userRef, { 
                         profile: userDataProfile,
@@ -1237,15 +1444,15 @@
         window.openChartHistoryModal = function() {
             const listContainer = document.getElementById('chartHistoryDateList');
             if (transactionsData.length === 0) {
-                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">Belum ada riwayat transaksi.</p>';
+                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1rem;">Belum ada riwayat transaksi.</p>';
             } else {
                 const uniqueDates = [...new Set(transactionsData.map(t => new Date(t.date).toISOString().split('T')[0]))].sort().reverse();
                 let html = '';
                 uniqueDates.forEach(dateStr => {
                     const formattedDate = new Date(dateStr).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
-                    html += `<button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); font-size: 0.85rem; padding: 0.65rem; justify-content: space-between;" onclick="selectChartDate('${dateStr}')">
+                    html += `<button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); font-size: 0.9rem; padding: 0.75rem; justify-content: space-between;" onclick="selectChartDate('${dateStr}')">
                         <span><i class="fa-solid fa-calendar-day text-accent"></i> ${formattedDate}</span>
-                        <i class="fa-solid fa-chevron-right" style="font-size:0.75rem; color:var(--text-muted);"></i>
+                        <i class="fa-solid fa-chevron-right" style="font-size:0.8rem; color:var(--text-muted);"></i>
                     </button>`;
                 });
                 listContainer.innerHTML = html;
@@ -1272,17 +1479,17 @@
         function renderNotificationList() {
             const container = document.getElementById('notificationListContainer');
             if (!latestAdminNotification || !latestAdminNotification.pesan) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1.5rem;">Belum ada pesan notifikasi dari admin.</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1.5rem;">Belum ada pesan notifikasi dari admin.</p>';
                 return;
             }
 
             container.innerHTML = `
-                <div style="background: var(--bg-input); border: 1px solid var(--border); padding: 0.85rem; border-radius: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-                        <span style="font-size: 0.75rem; font-weight: 600; color: #818cf8;">Pesan Sistem Admin</span>
-                        <span style="font-size: 0.65rem; color: var(--text-muted);">${latestAdminNotification.waktu || ''}</span>
+                <div style="background: var(--bg-input); border: 1px solid var(--border); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.8rem; font-weight: 600; color: #818cf8;">Pesan Sistem Admin</span>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">${latestAdminNotification.waktu || ''}</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4;">${latestAdminNotification.pesan}</p>
+                    <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.4;">${latestAdminNotification.pesan}</p>
                 </div>
             `;
         }
@@ -1318,13 +1525,13 @@
                     display: flex; justify-content: center; align-items: center; padding: 1.5rem;
                 `;
                 lockModal.innerHTML = `
-                    <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius); max-width: 360px; width: 100%; text-align: center; box-shadow: 0 20px 30px rgba(0,0,0,0.8);">
+                    <div style="background: var(--bg-card); border: 1px solid var(--border); padding: 2rem; border-radius: var(--radius); max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 30px rgba(0,0,0,0.8);">
                         <div class="modal-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--danger);"><i class="fa-solid fa-lock"></i></div>
                         <h3 style="margin-bottom: 0.75rem; color: var(--text-main);">Fitur Terkunci</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
                             Tidak bisa menggunakan fitur ini jika belum berlangganan, hubungi nomor ini untuk berlangganan <strong>081542721059</strong>
                         </p>
-                        <a href="https://wa.me/6281542721059?text=Halo%20Admin,%20saya%20ingin%20berlangganan%20aplikasi%20kasir%20saya." target="_blank" class="btn" style="background: #25d366; margin-bottom: 0.65rem; text-decoration: none;">
+                        <a href="https://wa.me/6281542721059?text=Halo%20Admin,%20saya%20ingin%20berlangganan%20aplikasi%20kasir%20saya." target="_blank" class="btn" style="background: #25d366; margin-bottom: 0.75rem; text-decoration: none;">
                             <i class="fa-brands fa-whatsapp"></i> Hubungi WhatsApp
                         </a>
                         <button class="btn" style="background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main);" onclick="closePaywallModal()">
@@ -1358,7 +1565,6 @@
             if (setQrisEl) setQrisEl.src = userDataProfile.qrisUrl;
             if (qrisDisplay) qrisDisplay.src = userDataProfile.qrisUrl;
 
-            // Pengisian nilai inputan formulir Pengaturan
             if (nameInput) nameInput.value = userDataProfile.storeName || '';
             if (phoneInput) phoneInput.value = userDataProfile.phone || '';
         }
@@ -1404,6 +1610,33 @@
             return parseInt(str.toString().replace(/\./g, '')) || 0;
         }
 
+        // --- FUNGSI PINTASAN UANG TUNAI ---
+        window.setExactCash = function() {
+            const total = currentCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const cashInput = document.getElementById('posCashInput');
+            cashInput.value = total.toLocaleString('id-ID');
+            calculateChange();
+        };
+
+        window.addQuickCash = function(amount) {
+    const cashInput = document.getElementById('posCashInput');
+    
+    // Ambil nilai saat ini, jika kosong atau NaN, jadikan 0
+    let currentPaid = parseRupiah(cashInput.value);
+    if (isNaN(currentPaid)) {
+        currentPaid = 0;
+    }
+    
+    // Tambahkan langsung nominal yang diklik dengan nilai yang ada di input saat ini
+    currentPaid += amount;
+    
+    // Update tampilan input
+    cashInput.value = currentPaid.toLocaleString('id-ID');
+    calculateChange();
+};
+
+
+
         function renderDashboard() {
             let weekly = 0;
             let monthly = 0;
@@ -1421,13 +1654,13 @@
             productsData.forEach(p => {
                 if (parseInt(p.stock) <= 0) {
                     soldoutCount++;
-                    soldoutHtml += `<div style="display:flex; justify-content:space-between; font-size:0.75rem; padding:0.25rem 0; border-bottom:1px solid var(--border);">
+                    soldoutHtml += `<div style="display:flex; justify-content:space-between; font-size:0.8rem; padding:0.35rem 0; border-bottom:1px solid var(--border);">
                         <span>${p.name}</span><span class="text-danger">Habis</span></div>`;
                 }
             });
 
             document.getElementById('statTotalSoldout').innerText = soldoutCount + ' Item';
-            document.getElementById('dashSoldoutList').innerHTML = soldoutHtml || '<p style="font-size:0.7rem; color:var(--text-muted); text-align:center;">Tidak ada produk sold out</p>';
+            document.getElementById('dashSoldoutList').innerHTML = soldoutHtml || '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Tidak ada produk sold out</p>';
 
             const chart = document.getElementById('dashChart');
             let chartHtml = '';
@@ -1450,7 +1683,7 @@
 
                 timeLabels.forEach((lbl, idx) => {
                     const omzetVal = hourlyTotals[idx];
-                    let height = Math.round((omzetVal / maxOmzet) * 75);
+                    let height = Math.round((omzetVal / maxOmzet) * 80);
                     if (omzetVal > 0 && height < 12) height = 12;
                     if (omzetVal === 0) height = 5;
 
@@ -1459,7 +1692,7 @@
                     chartHtml += `<div class="chart-bar-wrap" title="${lbl}: Rp ${omzetVal.toLocaleString('id-ID')}">
                         <span class="chart-value-label">${labelRp}</span>
                         <div class="chart-bar" style="height: ${height}%;"></div>
-                        <span style="font-size:0.55rem; color:var(--text-muted); margin-top:4px;">${lbl}</span>
+                        <span style="font-size:0.65rem; color:var(--text-muted); margin-top:6px;">${lbl}</span>
                     </div>`;
                 });
             } else {
@@ -1478,7 +1711,7 @@
 
                 days.forEach((day, idx) => {
                     const omzetVal = dailyTotals[idx];
-                    let height = Math.round((omzetVal / maxOmzet) * 75);
+                    let height = Math.round((omzetVal / maxOmzet) * 80);
                     if (omzetVal > 0 && height < 12) height = 12;
                     if (omzetVal === 0) height = 5;
 
@@ -1487,7 +1720,7 @@
                     chartHtml += `<div class="chart-bar-wrap" title="${day}: Rp ${omzetVal.toLocaleString('id-ID')}">
                         <span class="chart-value-label">${labelRp}</span>
                         <div class="chart-bar" style="height: ${height}%;"></div>
-                        <span style="font-size:0.6rem; color:var(--text-muted); margin-top:4px;">${day}</span>
+                        <span style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">${day}</span>
                     </div>`;
                 });
             }
@@ -1497,7 +1730,7 @@
         function renderPosCatalog() {
             const grid = document.getElementById('posCatalogGrid');
             if (productsData.length === 0) {
-                grid.innerHTML = '<p style="color:var(--text-muted); font-size:0.75rem; grid-column:span 2; text-align:center;">Belum ada produk</p>';
+                grid.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem; grid-column:span 2; text-align:center; padding:1.5rem;">Belum ada produk</p>';
                 return;
             }
             let html = '';
@@ -1561,7 +1794,7 @@
         function renderCart() {
             const container = document.getElementById('posCartList');
             if (currentCart.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 0.4rem;">Belum ada produk di keranjang</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 1rem;">Belum ada produk di keranjang</p>';
                 document.getElementById('posTotalQty').innerText = '0';
                 document.getElementById('posTotalPrice').innerText = 'Rp 0';
                 return;
@@ -1577,9 +1810,9 @@
                 html += `<div class="pos-cart-row">
                     <div>
                         <strong>${item.name}</strong><br>
-                        <span style="color:var(--text-muted); font-size:0.7rem;">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</span>
+                        <span style="color:var(--text-muted); font-size:0.75rem;">Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</span>
                     </div>
-                    <div style="display:flex; align-items:center; gap:0.35rem;">
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
                         <button class="btn-sm" style="background:var(--bg-input); color:var(--text-main); border:1px solid var(--border);" onclick="changeCartQty(${index}, -1)">-</button>
                         <span>${item.qty}</span>
                         <button class="btn-sm" style="background:var(--bg-input); color:var(--text-main); border:1px solid var(--border);" onclick="changeCartQty(${index}, 1)">+</button>
@@ -1606,7 +1839,7 @@
             document.getElementById('posChangeAmount').innerText = 'Rp ' + (change > 0 ? change.toLocaleString('id-ID') : 0);
         };
 
-        window.processCheckout = function() {
+                window.processCheckout = function() {
             if (!checkSubscriptionAccess()) return;
             if (currentCart.length === 0) {
                 showPopup('Kosong', 'Keranjang masih kosong.', 'error');
@@ -1638,16 +1871,21 @@
                     update(prodRef, { stock: item.stock - item.qty });
                 });
                 showPopup('Sukses', 'Transaksi berhasil disimpan & struk tercetak!', 'success');
+                
+                // === TAMBAHKAN BARIS INI UNTUK MERESET FORM PEMBAYARAN ===
                 currentCart = [];
-                document.getElementById('posCashInput').value = '';
+                document.getElementById('posCashInput').value = ''; // Mengosongkan input uang bayar
+                document.getElementById('posChangeAmount').innerText = 'Rp 0'; // Mereset tulisan kembalian menjadi Rp 0
+                
                 renderCart();
             });
         };
 
+
         function renderProducts() {
             const container = document.getElementById('productListContainer');
             if (productsData.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem; font-size: 0.85rem;">Belum ada produk terdaftar</p>';
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem; font-size: 0.9rem; grid-column:span 2;">Belum ada produk terdaftar</p>';
                 return;
             }
             let html = '';
@@ -1656,7 +1894,7 @@
                     <div class="product-info">
                         <h4>${p.name}</h4>
                         <p>Kode: ${p.code} | Stok: <span class="${p.stock <= 0 ? 'text-danger' : ''}">${p.stock}</span></p>
-                        <p style="font-weight:600; color:var(--accent);">Rp ${parseInt(p.price).toLocaleString('id-ID')}</p>
+                        <p style="font-weight:600; color:var(--accent); margin-top:3px;">Rp ${parseInt(p.price).toLocaleString('id-ID')}</p>
                     </div>
                     <div style="display:flex; gap:0.4rem;">
                         <button class="btn-sm" style="background:var(--primary); color:white;" onclick="openProductModal('${p.id}')">Edit</button>
@@ -1712,6 +1950,74 @@
             if (confirm('Yakin ingin menghapus produk ini?')) {
                 remove(ref(db, `users/${currentUser.uid}/products/${id}`)).then(() => {
                     showPopup('Terhapus', 'Produk dihapus.', 'info');
+                });
+            }
+        };
+
+        // --- MANAJEMEN PENGELUARAN (GAS, DLL) ---
+        function renderExpenses() {
+            const container = document.getElementById('expenseListContainer');
+            let totalExpense = 0;
+
+            if (expensesData.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem; font-size: 0.9rem; grid-column:span 2;">Belum ada catatan pengeluaran</p>';
+                document.getElementById('statTotalExpense').innerText = 'Rp 0';
+                return;
+            }
+
+            let html = '';
+            expensesData.slice().reverse().forEach(exp => {
+                totalExpense += exp.amount || 0;
+                const dateObj = new Date(exp.date);
+                const dateStr = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+                html += `<div class="product-card">
+                    <div class="product-info">
+                        <h4>${exp.name}</h4>
+                        <p>${dateStr}</p>
+                        <p style="font-weight:600; color:var(--danger); margin-top:3px;">Rp ${parseInt(exp.amount).toLocaleString('id-ID')}</p>
+                    </div>
+                    <div>
+                        <button class="btn-sm" style="background:var(--danger); color:white;" onclick="deleteExpense('${exp.id}')">Hapus</button>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('statTotalExpense').innerText = 'Rp ' + totalExpense.toLocaleString('id-ID');
+        }
+
+        window.openExpenseModal = function() {
+            if (!checkSubscriptionAccess()) return;
+            document.getElementById('expenseForm').reset();
+            document.getElementById('expenseModal').classList.add('active');
+        };
+
+        window.closeExpenseModal = function() {
+            document.getElementById('expenseModal').classList.remove('active');
+        };
+
+        window.saveExpense = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('expName').value.trim();
+            const amount = parseRupiah(document.getElementById('expAmount').value);
+
+            const expenseRef = push(ref(db, `users/${currentUser.uid}/expenses`));
+            set(expenseRef, {
+                name: name,
+                amount: amount,
+                date: new Date().toISOString()
+            }).then(() => {
+                closeExpenseModal();
+                showPopup('Sukses', 'Catatan pengeluaran berhasil disimpan.', 'success');
+            });
+        };
+
+        window.deleteExpense = function(id) {
+            if (!checkSubscriptionAccess()) return;
+            if (confirm('Yakin ingin menghapus catatan pengeluaran ini?')) {
+                remove(ref(db, `users/${currentUser.uid}/expenses/${id}`)).then(() => {
+                    showPopup('Terhapus', 'Catatan pengeluaran dihapus.', 'info');
                 });
             }
         };
@@ -1789,8 +2095,8 @@
             const strukContainer = document.getElementById('historyStrukList');
 
             if (transactionsData.length === 0) {
-                transContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.8rem;">Belum ada riwayat transaksi</p>';
-                strukContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.8rem;">Belum ada arsip struk</p>';
+                transContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.9rem; grid-column:span 2;">Belum ada riwayat transaksi</p>';
+                strukContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:0.9rem; grid-column:span 2;">Belum ada arsip struk</p>';
                 return;
             }
 
@@ -1803,13 +2109,13 @@
                 const invoiceNo = 'INV/' + dateObj.getTime().toString().slice(-6);
                 const itemsSummary = t.items.map(i => `${i.name} (${i.qty}x)`).join(', ');
 
-                transHtml += `<div class="dash-card" style="margin-bottom:0.65rem;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
-                        <span style="font-weight:600; font-size:0.8rem;">${dateStr}</span>
+                transHtml += `<div class="dash-card" style="margin-bottom:0;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+                        <span style="font-weight:600; font-size:0.85rem;">${dateStr}</span>
                         <span class="text-accent" style="font-weight:700;">Rp ${(t.total || 0).toLocaleString('id-ID')}</span>
                     </div>
-                    <p style="font-size:0.75rem; color:var(--text-main); margin-bottom:0.15rem;"><strong>Produk:</strong> ${itemsSummary}</p>
-                    <p style="font-size:0.7rem; color:var(--text-muted);">Metode: ${t.method.toUpperCase()} | No: ${invoiceNo}</p>
+                    <p style="font-size:0.8rem; color:var(--text-main); margin-bottom:0.25rem;"><strong>Produk:</strong> ${itemsSummary}</p>
+                    <p style="font-size:0.75rem; color:var(--text-muted);">Metode: ${t.method.toUpperCase()} | No: ${invoiceNo}</p>
                 </div>`;
 
                 strukHtml += `<div class="thermal-receipt">
@@ -1911,9 +2217,11 @@
         };
 
         window.confirmResetData = function() {
-            if (confirm('Yakin ingin mereset riwayat transaksi? Data produk Anda DIJAMIN AMAN dan tidak akan terhapus.')) {
+            if (confirm('Yakin ingin mereset riwayat transaksi & pengeluaran? Data produk Anda DIJAMIN AMAN dan tidak akan terhapus.')) {
                 remove(ref(db, `users/${currentUser.uid}/transactions`)).then(() => {
-                    showPopup('Berhasil', 'Riwayat transaksi & grafik omzet berhasil direset.', 'success');
+                    remove(ref(db, `users/${currentUser.uid}/expenses`)).then(() => {
+                        showPopup('Berhasil', 'Riwayat transaksi & pengeluaran berhasil direset.', 'success');
+                    });
                 });
             }
         };
