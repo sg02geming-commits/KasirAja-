@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Library Html5Qrcode untuk Kamera Scanner Barcode -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <!-- Library SheetJS untuk Export Excel (CSV/XLSX) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Library html2pdf untuk Download PDF Tabel Terstruktur -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         :root {
@@ -293,13 +297,13 @@
             color: var(--text-muted);
             cursor: pointer;
             transition: var(--transition);
-            font-size: 0.65rem;
-            gap: 3px;
+            font-size: 0.6rem;
+            gap: 2px;
             white-space: nowrap;
         }
 
         .nav-item i {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             transition: var(--transition);
         }
 
@@ -794,6 +798,50 @@
             height: auto !important;
             object-fit: cover;
         }
+        @media print {
+            .app-header, 
+            .bottom-nav, 
+            .btn, 
+            .icon-btn, 
+            header, 
+            nav,
+            div[style*="display: flex; gap: 8px;"] {
+                display: none !important;
+            }
+
+            body, #app, .views-container {
+                background: #ffffff !important;
+                color: #000000 !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .view-section {
+                display: none !important;
+            }
+
+            #viewHistoryTrans.view-section,
+            #viewHistoryTrans.view-section.active {
+                display: block !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            .product-grid-container {
+                display: block !important;
+            }
+
+            .thermal-receipt, .product-card, .dash-card {
+                border: 1px solid #ccc !important;
+                break-inside: avoid;
+                margin-bottom: 1rem !important;
+                background: #fff !important;
+                color: #000 !important;
+                box-shadow: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -868,7 +916,10 @@
                     <p id="headerEmail">user@toko.com</p>
                 </div>
             </div>
-            <div class="header-actions">
+            <div class="header-actions" style="display: flex; gap: 8px; align-items: center;">
+                <div class="icon-btn" onclick="openShiftModal()" title="Manajemen Shift Kasir" style="background: rgba(16, 185, 129, 0.15); color: var(--accent); border-color: var(--accent);">
+                    <i class="fa-solid fa-cash-register"></i>
+                </div>
                 <div class="icon-btn" onclick="openNotificationModal()">
                     <i class="fa-regular fa-bell"></i>
                     <span id="notifDotBadge" class="notification-badge"></span>
@@ -922,7 +973,6 @@
             <!-- KASIR -->
             <section id="viewKasir" class="view-section">
                 <div class="pos-container">
-                    <!-- SISI KIRI: KATALOG & SCANNER -->
                     <div>
                         <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem;">
                             <input type="text" id="posBarcodeScanInput" class="form-control" placeholder="Scan Barcode / Ketik Kode..." onkeypress="handlePosBarcodeKey(event)">
@@ -933,7 +983,6 @@
                         <div class="pos-grid-catalog" id="posCatalogGrid"></div>
                     </div>
 
-                    <!-- SISI KANAN: KERANJANG & PEMBAYARAN -->
                     <div>
                         <h5 style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">KERANJANG BELANJA:</h5>
                         <div class="pos-cart-box" id="posCartList">
@@ -957,21 +1006,18 @@
                         </div>
 
                         <div id="cashPaymentSection">
-<!-- TOMBOL PINTASAN NOMINAL UANG -->
-<div class="form-group" style="margin-bottom: 0.6rem;">
-    <label>Pilih Nominal Cepat:</label>
-    <div class="quick-cash-grid" style="grid-template-columns: repeat(4, 1fr);">
-        <button type="button" class="quick-cash-btn exact" onclick="setExactCash()" style="grid-column: span 4;">Uang Pas</button>
-        <button type="button" class="quick-cash-btn" onclick="addQuickCash(2000)">+ 2rb</button>
-        <button type="button" class="quick-cash-btn" onclick="addQuickCash(5000)">+ 5rb</button>
-        <button type="button" class="quick-cash-btn" onclick="addQuickCash(10000)">+ 10rb</button>
-        <button type="button" class="quick-cash-btn" onclick="addQuickCash(20000)">+ 20rb</button>
-        <button type="button" class="quick-cash-btn" onclick="addQuickCash(50000)">+ 50rb</button>
-        <button type="button" class="quick-cash-btn" onclick="addQuickCash(100000)" style="grid-column: span 2;">+ 100rb</button>
-    </div>
-</div>
-
-
+                            <div class="form-group" style="margin-bottom: 0.6rem;">
+                                <label>Pilih Nominal Cepat:</label>
+                                <div class="quick-cash-grid" style="grid-template-columns: repeat(4, 1fr);">
+                                    <button type="button" class="quick-cash-btn exact" onclick="setExactCash()" style="grid-column: span 4;">Uang Pas</button>
+                                    <button type="button" class="quick-cash-btn" onclick="addQuickCash(2000)">+ 2rb</button>
+                                    <button type="button" class="quick-cash-btn" onclick="addQuickCash(5000)">+ 5rb</button>
+                                    <button type="button" class="quick-cash-btn" onclick="addQuickCash(10000)">+ 10rb</button>
+                                    <button type="button" class="quick-cash-btn" onclick="addQuickCash(20000)">+ 20rb</button>
+                                    <button type="button" class="quick-cash-btn" onclick="addQuickCash(50000)">+ 50rb</button>
+                                    <button type="button" class="quick-cash-btn" onclick="addQuickCash(100000)" style="grid-column: span 2;">+ 100rb</button>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <label>Uang Dibayarkan (Tunai)</label>
@@ -1002,11 +1048,14 @@
                 <div class="product-grid-container" id="productListContainer"></div>
             </section>
 
-            <!-- PENGELUARAN (STOK GAS, DLL) -->
+            <!-- PENGELUARAN -->
             <section id="viewPengeluaran" class="view-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <h4 style="font-size: 1.1rem;"><i class="fa-solid fa-wallet text-warning"></i> Catatan Pengeluaran Toko</h4>
-                    <button class="btn" style="width: auto; padding: 0.7rem 1.2rem; background: var(--warning); color: #000;" onclick="openExpenseModal()"><i class="fa-solid fa-plus"></i> Catat Pengeluaran</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn" style="width: auto; padding: 0.5rem 0.8rem; font-size: 0.8rem; background: var(--primary);" onclick="convertToTableData('expenses')"><i class="fa-solid fa-table"></i> Ubah ke Tabel</button>
+                        <button class="btn" style="width: auto; padding: 0.7rem 1.2rem; background: var(--warning); color: #000;" onclick="openExpenseModal()"><i class="fa-solid fa-plus"></i> Catat Biaya</button>
+                    </div>
                 </div>
 
                 <div class="dash-card" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
@@ -1022,8 +1071,31 @@
 
             <!-- HISTORY TRANSAKSI -->
             <section id="viewHistoryTrans" class="view-section">
-                <h4 class="mb-2"><i class="fa-solid fa-clock-rotate-left text-accent"></i> Riwayat Transaksi</h4>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 class="mb-2" style="margin-bottom:0;"><i class="fa-solid fa-clock-rotate-left text-accent"></i> Riwayat Transaksi</h4>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn" style="width: auto; padding: 0.5rem 0.8rem; font-size: 0.8rem; background: var(--primary);" onclick="convertToTableData('transactions')"><i class="fa-solid fa-table"></i> Ubah ke Tabel</button>
+                        <button class="btn" style="width: auto; padding: 0.5rem 0.8rem; font-size: 0.8rem; background: var(--bg-input); border: 1px solid var(--border);" onclick="printReportPDF()"><i class="fa-solid fa-print"></i> Cetak PDF</button>
+                    </div>
+                </div>
                 <div class="product-grid-container" id="historyTransList"></div>
+            </section>
+
+            <!-- TABLE LAPORAN (MENU NAV BARU) -->
+            <section id="viewTableLaporan" class="view-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 class="mb-2" style="margin-bottom:0;"><i class="fa-solid fa-table-list text-accent"></i> Tabel Laporan Tersimpan</h4>
+                    <div style="display: flex; gap: 8px;">
+                        <select id="tableReportTypeSelect" class="form-control" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem;" onchange="renderTableLaporanView()">
+                            <option value="transactions">Laporan Transaksi</option>
+                            <option value="expenses">Laporan Pengeluaran</option>
+                        </select>
+                        <button class="btn" style="width: auto; padding: 0.5rem 0.8rem; font-size: 0.8rem; background: var(--danger);" onclick="downloadTablePDF()"><i class="fa-solid fa-file-pdf"></i> Download Table PDF</button>
+                    </div>
+                </div>
+                <div class="dash-card" style="overflow-x: auto; padding: 0.5rem;" id="tableReportContentWrapper">
+                    <!-- Area Render Tabel Urut Nomor -->
+                </div>
             </section>
 
             <!-- HISTORY STRUK -->
@@ -1035,7 +1107,6 @@
             <!-- PENGATURAN -->
             <section id="viewPengaturan" class="view-section">
                 <div class="settings-grid">
-                    
                     <div class="setting-box">
                         <h4><i class="fa-solid fa-store"></i> Identitas Profil & Toko</h4>
                         <div class="upload-preview-wrap">
@@ -1094,10 +1165,8 @@
                             <i class="fa-solid fa-right-from-bracket"></i> Keluar (Logout)
                         </button>
                     </div>
-
                 </div>
             </section>
-
         </div>
 
         <!-- BOTTOM NAVIGATION -->
@@ -1122,6 +1191,10 @@
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>Riwayat</span>
             </div>
+            <div class="nav-item" onclick="switchView('viewTableLaporan', this)" onclick="renderTableLaporanView()">
+                <i class="fa-solid fa-table-list"></i>
+                <span>Tabel</span>
+            </div>
             <div class="nav-item" onclick="switchView('viewHistoryStruk', this)">
                 <i class="fa-solid fa-receipt"></i>
                 <span>Struk</span>
@@ -1139,6 +1212,18 @@
                 <h3 id="modalTitle">Informasi</h3>
                 <p id="modalMessage" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Pesan sistem...</p>
                 <button class="btn" onclick="closeModal()">Mengerti</button>
+            </div>
+        </div>
+
+        <!-- MODAL SHIFT KASIR & TUTUP BUKU (Z-REPORT) -->
+        <div class="modal-overlay" id="shiftModal">
+            <div class="modal-card" style="max-width: 440px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem;"><i class="fa-solid fa-cash-register text-accent"></i> Manajemen Shift & Tutup Buku</h3>
+                    <button class="btn-sm" style="background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border);" onclick="closeShiftModal()">Tutup</button>
+                </div>
+                <div id="shiftActiveStatusCard" class="dash-card" style="padding: 1rem; margin-bottom: 1rem;"></div>
+                <div id="shiftActionForm"></div>
             </div>
         </div>
 
@@ -1255,7 +1340,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 
     <!-- Firebase SDKs & Logika Utama -->
@@ -1279,20 +1363,20 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        let currentUser = null;
-        let activeScannerTarget = null;
-        let currentCart = [];
-        let paymentMethod = 'cash';
-        let productsData = [];
-        let transactionsData = [];
-        let expensesData = [];
-        let globalSubscriptionStatus = "aktif"; 
-        let userDataProfile = { storeName: "Toko Berkah", phone: "08123456789", photoUrl: "https://via.placeholder.com/150", qrisUrl: "https://via.placeholder.com/200" };
-        let latestAdminNotification = null;
-        let html5QrCodeScanner = null;
-        let isScanningActive = false; 
-
-        let selectedChartDate = null; 
+        window.currentUser = null;
+        window.activeScannerTarget = null;
+        window.currentCart = [];
+        window.paymentMethod = 'cash';
+        window.productsData = [];
+        window.transactionsData = [];
+        window.expensesData = [];
+        window.currentShiftData = null; 
+        window.globalSubscriptionStatus = "aktif"; 
+        window.userDataProfile = { storeName: "Toko Berkah", phone: "08123456789", photoUrl: "https://via.placeholder.com/150", qrisUrl: "https://via.placeholder.com/200" };
+        window.latestAdminNotification = null;
+        window.html5QrCodeScanner = null;
+        window.isScanningActive = false; 
+        window.selectedChartDate = null; 
 
         window.switchToRegister = function() {
             document.getElementById('loginScreen').classList.add('hidden');
@@ -1416,6 +1500,7 @@
                     productsData = data.products ? Object.keys(data.products).map(k => ({id: k, ...data.products[k]})) : [];
                     transactionsData = data.transactions ? Object.keys(data.transactions).map(k => ({id: k, ...data.transactions[k]})) : [];
                     expensesData = data.expenses ? Object.keys(data.expenses).map(k => ({id: k, ...data.expenses[k]})) : [];
+                    currentShiftData = data.current_shift || null;
                     
                     updateUIProfile();
                     renderProducts();
@@ -1423,6 +1508,7 @@
                     renderDashboard();
                     renderHistory();
                     renderExpenses();
+                    renderTableLaporanView();
                 } else {
                     set(userRef, { 
                         profile: userDataProfile,
@@ -1432,14 +1518,238 @@
             });
         }
 
+        // --- MANAJEMEN SHIFT & TUTUP BUKU (Z-REPORT) ---
+        window.openShiftModal = function() {
+            renderShiftModalContent();
+            document.getElementById('shiftModal').classList.add('active');
+        };
+
+        window.closeShiftModal = function() {
+            document.getElementById('shiftModal').classList.remove('active');
+        };
+
+        function renderShiftModalContent() {
+            const statusCard = document.getElementById('shiftActiveStatusCard');
+            const actionForm = document.getElementById('shiftActionForm');
+
+            if (!currentShiftData || !currentShiftData.isOpen) {
+                statusCard.innerHTML = `
+                    <h5 style="color: var(--text-muted); font-size: 0.8rem;">Status Kasir</h5>
+                    <h3 class="text-danger" style="font-size: 1.1rem; margin-top:2px;"><i class="fa-solid fa-lock"></i> Shift Belum Dimulai</h3>
+                `;
+                actionForm.innerHTML = `
+                    <div class="form-group">
+                        <label>Modal Awal Kasir (Cash Drawer Rp)</label>
+                        <input type="text" id="shiftStartModalInput" class="form-control" placeholder="0" oninput="formatRupiahInput(this)">
+                    </div>
+                    <button class="btn" style="background: var(--accent); color: white;" onclick="startNewShift()">
+                        <i class="fa-solid fa-play"></i> Mulai Shift Kasir
+                    </button>
+                `;
+            } else {
+                const startTime = new Date(currentShiftData.startTime).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                statusCard.innerHTML = `
+                    <h5 style="color: var(--text-muted); font-size: 0.8rem;">Status Shift Aktif</h5>
+                    <h3 class="text-accent" style="font-size: 1.1rem; margin-top:2px;"><i class="fa-solid fa-lock-open"></i> Shift Berjalan (Mulai: ${startTime})</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-main); margin-top:6px;">Modal Awal: <strong>Rp ${(currentShiftData.initialModal || 0).toLocaleString('id-ID')}</strong></p>
+                `;
+                actionForm.innerHTML = `
+                    <div class="form-group">
+                        <label>Hitung Uang Fisik di Laci Sekarang (Rp)</label>
+                        <input type="text" id="shiftPhysicalCashInput" class="form-control" placeholder="0" oninput="formatRupiahInput(this)">
+                    </div>
+                    <button class="btn" style="background: var(--danger); color: white;" onclick="closeCurrentShift()">
+                        <i class="fa-solid fa-flag-checkered"></i> Tutup Buku Shift (Z-Report)
+                    </button>
+                `;
+            }
+        }
+
+        window.startNewShift = function() {
+            const modalInput = parseRupiah(document.getElementById('shiftStartModalInput').value);
+            const shiftData = {
+                isOpen: true,
+                initialModal: modalInput,
+                startTime: new Date().toISOString()
+            };
+            set(ref(db, `users/${currentUser.uid}/current_shift`), shiftData).then(() => {
+                showPopup('Shift Dimulai', 'Modal awal laci kasir berhasil dicatat.', 'success');
+                closeShiftModal();
+            });
+        };
+
+        window.closeCurrentShift = function() {
+            const physicalCash = parseRupiah(document.getElementById('shiftPhysicalCashInput').value);
+            const shiftStartTime = new Date(currentShiftData.startTime).getTime();
+            let shiftCashSales = 0;
+            let shiftQrisSales = 0;
+
+            transactionsData.forEach(t => {
+                if (new Date(t.date).getTime() >= shiftStartTime) {
+                    if (t.method === 'cash') shiftCashSales += t.total || 0;
+                    else if (t.method === 'qris') shiftQrisSales += t.total || 0;
+                }
+            });
+
+            const expectedCashInDrawer = currentShiftData.initialModal + shiftCashSales;
+            const variance = physicalCash - expectedCashInDrawer;
+
+            const shiftReport = {
+                startTime: currentShiftData.startTime,
+                endTime: new Date().toISOString(),
+                initialModal: currentShiftData.initialModal,
+                cashSales: shiftCashSales,
+                qrisSales: shiftQrisSales,
+                expectedCash: expectedCashInDrawer,
+                actualPhysicalCash: physicalCash,
+                variance: variance
+            };
+
+            push(ref(db, `users/${currentUser.uid}/shift_reports`), shiftReport).then(() => {
+                set(ref(db, `users/${currentUser.uid}/current_shift`), { isOpen: false }).then(() => {
+                    closeShiftModal();
+                    showPopup('Tutup Buku Selesai', `Shift ditutup. Selisih kasir: Rp ${variance.toLocaleString('id-ID')}`, variance < 0 ? 'error' : 'success');
+                });
+            });
+        };
+
+        // --- KONVERSI KE TABEL DAN SIMPAN KE REAL-TIME FIREBASE ---
+        window.convertToTableData = function(type) {
+            if (!currentUser) return;
+            let rawData = type === 'transactions' ? transactionsData : expensesData;
+            if (!rawData || rawData.length === 0) {
+                showPopup('Kosong', 'Tidak ada data laporan untuk diubah ke tabel!', 'error');
+                return;
+            }
+
+            let structuredObj = {};
+            rawData.forEach((item, index) => {
+                let seqNumber = index + 1;
+                if (type === 'transactions') {
+                    const itemsSummary = item.items && Array.isArray(item.items) 
+                        ? item.items.map(i => `${i.name} (${i.qty}x)`).join(', ') 
+                        : '-';
+                    structuredObj[seqNumber] = {
+                        no: seqNumber,
+                        id: item.id || '-',
+                        tanggal: item.date ? new Date(item.date).toLocaleString('id-ID') : '-',
+                        rincian: itemsSummary,
+                        metode: (item.method || 'cash').toUpperCase(),
+                        total: Number(item.total) || 0
+                    };
+                } else if (type === 'expenses') {
+                    structuredObj[seqNumber] = {
+                        no: seqNumber,
+                        id: item.id || '-',
+                        tanggal: item.date ? new Date(item.date).toLocaleString('id-ID') : '-',
+                        keterangan: item.name || '-',
+                        jumlah: Number(item.amount) || 0
+                    };
+                }
+            });
+
+            set(ref(db, `users/${currentUser.uid}/table_reports/${type}`), structuredObj).then(() => {
+                showPopup('Berhasil', 'Laporan berhasil diubah menjadi tabel dan disimpan rapi ke Realtime Database Firebase!', 'success');
+                switchView('viewTableLaporan', document.querySelectorAll('.nav-item')[5]);
+                document.getElementById('tableReportTypeSelect').value = type;
+                renderTableLaporanView();
+            }).catch(err => {
+                showPopup('Gagal', err.message, 'error');
+            });
+        };
+
+        window.renderTableLaporanView = async function() {
+            if (!currentUser) return;
+            const type = document.getElementById('tableReportTypeSelect').value;
+            const wrapper = document.getElementById('tableReportContentWrapper');
+            
+            const snapshot = await get(ref(db, `users/${currentUser.uid}/table_reports/${type}`));
+            const tableData = snapshot.val();
+
+            if (!tableData) {
+                wrapper.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem; font-size: 0.9rem;">Belum ada data tabel laporan. Silakan ubah dari menu Riwayat atau Biaya.</p>';
+                return;
+            }
+
+            let html = `
+                <div id="pdfExportContainer" style="background: #ffffff; color: #1a1a1a; padding: 1.5rem; border-radius: 8px;">
+                    <div style="text-align: center; margin-bottom: 1.25rem; border-bottom: 2px solid #cbd5e1; padding-bottom: 0.75rem;">
+                        <h2 style="font-size: 1.2rem; font-weight: 700; text-transform: uppercase; color: #0f172a;">${userDataProfile.storeName}</h2>
+                        <p style="font-size: 0.8rem; color: #475569;">Laporan Terstruktur (${type === 'transactions' ? 'Transaksi' : 'Pengeluaran'})</p>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                        <thead>
+                            <tr style="background: #f1f5f9; color: #0f172a; text-align: left;">
+                                <th style="padding: 8px; border: 1px solid #cbd5e1; width: 40px; text-align: center;">No</th>
+                                <th style="padding: 8px; border: 1px solid #cbd5e1;">Tanggal</th>
+                                ${type === 'transactions' ? `
+                                <th style="padding: 8px; border: 1px solid #cbd5e1;">Rincian Produk</th>
+                                <th style="padding: 8px; border: 1px solid #cbd5e1;">Metode</th>
+                                <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;">Total (Rp)</th>
+                                ` : `
+                                <th style="padding: 8px; border: 1px solid #cbd5e1;">Keterangan Biaya</th>
+                                <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;">Jumlah (Rp)</th>
+                                `}
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            Object.keys(tableData).sort((a,b) => Number(a)-Number(b)).forEach(key => {
+                const row = tableData[key];
+                html += `
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${row.no}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1;">${row.tanggal}</td>
+                        ${type === 'transactions' ? `
+                        <td style="padding: 8px; border: 1px solid #cbd5e1;">${row.rincian}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1;">${row.metode}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;">Rp ${(row.total || 0).toLocaleString('id-ID')}</td>
+                        ` : `
+                        <td style="padding: 8px; border: 1px solid #cbd5e1;">${row.keterangan}</td>
+                        <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;">Rp ${(row.jumlah || 0).toLocaleString('id-ID')}</td>
+                        `}
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            wrapper.innerHTML = html;
+        };
+
+        window.downloadTablePDF = function() {
+            const element = document.getElementById('pdfExportContainer');
+            if (!element) {
+                showPopup('Kosong', 'Tidak ada tabel untuk didownload!', 'error');
+                return;
+            }
+            const type = document.getElementById('tableReportTypeSelect').value;
+            const opt = {
+                margin:       10,
+                filename:     `Laporan_Tabel_${type}_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        };
+
+        window.printReportPDF = function() {
+            window.print();
+        };
+
         window.openNotificationModal = function() {
             renderNotificationList();
             document.getElementById('notificationModal').classList.add('active');
-        }
+        };
 
         window.closeNotificationModal = function() {
             document.getElementById('notificationModal').classList.remove('active');
-        }
+        };
 
         window.openChartHistoryModal = function() {
             const listContainer = document.getElementById('chartHistoryDateList');
@@ -1548,7 +1858,7 @@
         window.closePaywallModal = function() {
             const lockModal = document.getElementById('paywallModalDynamic');
             if (lockModal) lockModal.style.display = 'none';
-        }
+        };
 
         function updateUIProfile() {
             const storeNameEl = document.getElementById('headerStoreName');
@@ -1578,6 +1888,9 @@
             if (viewId === 'viewPengaturan') {
                 updateUIProfile();
             }
+            if (viewId === 'viewTableLaporan') {
+                renderTableLaporanView();
+            }
         };
 
         window.showPopup = function(title, msg, type = 'info') {
@@ -1603,14 +1916,13 @@
                 rupiah += separator + ribuan.join('.');
             }
             input.value = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-        }
+        };
 
         function parseRupiah(str) {
             if (!str) return 0;
             return parseInt(str.toString().replace(/\./g, '')) || 0;
         }
 
-        // --- FUNGSI PINTASAN UANG TUNAI ---
         window.setExactCash = function() {
             const total = currentCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const cashInput = document.getElementById('posCashInput');
@@ -1619,23 +1931,15 @@
         };
 
         window.addQuickCash = function(amount) {
-    const cashInput = document.getElementById('posCashInput');
-    
-    // Ambil nilai saat ini, jika kosong atau NaN, jadikan 0
-    let currentPaid = parseRupiah(cashInput.value);
-    if (isNaN(currentPaid)) {
-        currentPaid = 0;
-    }
-    
-    // Tambahkan langsung nominal yang diklik dengan nilai yang ada di input saat ini
-    currentPaid += amount;
-    
-    // Update tampilan input
-    cashInput.value = currentPaid.toLocaleString('id-ID');
-    calculateChange();
-};
-
-
+            const cashInput = document.getElementById('posCashInput');
+            let currentPaid = parseRupiah(cashInput.value);
+            if (isNaN(currentPaid)) {
+                currentPaid = 0;
+            }
+            currentPaid += amount;
+            cashInput.value = currentPaid.toLocaleString('id-ID');
+            calculateChange();
+        };
 
         function renderDashboard() {
             let weekly = 0;
@@ -1839,7 +2143,7 @@
             document.getElementById('posChangeAmount').innerText = 'Rp ' + (change > 0 ? change.toLocaleString('id-ID') : 0);
         };
 
-                window.processCheckout = function() {
+        window.processCheckout = function() {
             if (!checkSubscriptionAccess()) return;
             if (currentCart.length === 0) {
                 showPopup('Kosong', 'Keranjang masih kosong.', 'error');
@@ -1872,15 +2176,13 @@
                 });
                 showPopup('Sukses', 'Transaksi berhasil disimpan & struk tercetak!', 'success');
                 
-                // === TAMBAHKAN BARIS INI UNTUK MERESET FORM PEMBAYARAN ===
                 currentCart = [];
-                document.getElementById('posCashInput').value = ''; // Mengosongkan input uang bayar
-                document.getElementById('posChangeAmount').innerText = 'Rp 0'; // Mereset tulisan kembalian menjadi Rp 0
+                document.getElementById('posCashInput').value = '';
+                document.getElementById('posChangeAmount').innerText = 'Rp 0';
                 
                 renderCart();
             });
         };
-
 
         function renderProducts() {
             const container = document.getElementById('productListContainer');
@@ -1954,7 +2256,6 @@
             }
         };
 
-        // --- MANAJEMEN PENGELUARAN (GAS, DLL) ---
         function renderExpenses() {
             const container = document.getElementById('expenseListContainer');
             let totalExpense = 0;
